@@ -15,6 +15,10 @@ function guessName(p) {
   if (p.isBitKeep || p.isBitget) return 'Bitget Wallet'
   if (p.isTrust || p.isTrustWallet) return 'Trust Wallet'
   if (p.isCoinbaseWallet) return 'Coinbase Wallet'
+  if (p.isPhantom) return 'Phantom'
+  if (p.isRainbow) return 'Rainbow'
+  if (p.isSafePal) return 'SafePal'
+  if (p.isTokenPocket) return 'TokenPocket'
   if (p.isMetaMask) return 'MetaMask'
   return 'Browser wallet'
 }
@@ -35,6 +39,7 @@ function legacyWallets() {
   push(window.okxwallet, 'OKX Wallet')
   push(window.bitkeep && window.bitkeep.ethereum, 'Bitget Wallet')
   push(window.trustwallet, 'Trust Wallet')
+  push(window.phantom && window.phantom.ethereum, 'Phantom')
   return out
 }
 
