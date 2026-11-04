@@ -18,7 +18,7 @@ export default function RecentSwaps({ limit = 10, mine = null }) {
           setErr('')
         }
       } catch (e) {
-        if (!dead) setErr('Swaps load nahi ho paaye. Thodi der baad refresh karo.')
+        if (!dead) setErr('Could not load swaps. Please refresh in a moment.')
       }
     }
     run()
@@ -31,7 +31,7 @@ export default function RecentSwaps({ limit = 10, mine = null }) {
 
   if (err) return <p className="muted">{err}</p>
   if (!items) return <p className="muted">Loading swaps…</p>
-  if (!items.length) return <p className="muted">Pichhle ~3 din me koi swap nahi mila.</p>
+  if (!items.length) return <p className="muted">No swaps in the last ~3 days.</p>
 
   return (
     <div className="list">
