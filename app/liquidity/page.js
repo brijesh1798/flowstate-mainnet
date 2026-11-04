@@ -82,7 +82,7 @@ export default function LiquidityPage() {
       setTick((x) => x + 1)
     } catch (e) {
       setIsErr(true)
-      setStatus((e && (e.shortMessage || e.message)) || 'Transaction fail ho gaya')
+      setStatus((e && (e.shortMessage || e.message)) || 'Transaction failed')
     }
     setBusy(false)
   }, [])
@@ -92,7 +92,7 @@ export default function LiquidityPage() {
       address: token, abi: erc20Abi, functionName: 'allowance', args: [account, ADDR.NPM],
     })
     if (cur < need) {
-      setStatus(label + ' approve — wallet me confirm karo…')
+      setStatus('Approve ' + label + ' in your wallet…')
       await write({ address: token, abi: erc20Abi, functionName: 'approve', args: [ADDR.NPM, need] })
     }
   }
@@ -103,7 +103,7 @@ export default function LiquidityPage() {
       const a1 = plan.amount1
       await ensureAllowance(TOKEN0, a0, SYM0)
       await ensureAllowance(TOKEN1, a1, SYM1)
-      setStatus('Position mint — wallet me confirm karo…')
+      setStatus('Confirm the new position in your wallet…')
       const hash = await write({
         address: ADDR.NPM,
         abi: npmAbi,
@@ -125,14 +125,14 @@ export default function LiquidityPage() {
         ],
       })
       setTxHash(hash)
-      setStatus('Liquidity add ho gayi ✅')
+      setStatus('Liquidity added ✅')
       setAmount('')
     })
   }
 
   function collectFees(pos) {
     return run(async () => {
-      setStatus('Fees collect — wallet me confirm karo…')
+      setStatus('Confirm fee collection in your wallet…')
       const hash = await write({
         address: ADDR.NPM,
         abi: npmAbi,
@@ -140,7 +140,7 @@ export default function LiquidityPage() {
         args: [{ tokenId: pos.id, recipient: account, amount0Max: MAX128, amount1Max: MAX128 }],
       })
       setTxHash(hash)
-      setStatus('Fees collect ho gaye ✅')
+      setStatus('Fees collected ✅')
     })
   }
 
@@ -160,17 +160,17 @@ export default function LiquidityPage() {
           args: [{ tokenId: pos.id, recipient: account, amount0Max: MAX128, amount1Max: MAX128 }],
         }),
       ]
-      setStatus('Remove ' + pct + '% — wallet me confirm karo…')
+      setStatus('Confirm removing ' + pct + '% in your wallet…')
       const hash = await write({ address: ADDR.NPM, abi: npmAbi, functionName: 'multicall', args: [data] })
       setTxHash(hash)
-      setStatus('Liquidity remove ho gayi ✅')
+      setStatus('Liquidity removed ✅')
     })
   }
 
   let action
-  if (!account) action = <button className="btn" onClick={() => connect().catch(() => {})}>Connect wallet</button>
+  if (!account) action = <button className="btn" onClick={connect}>Connect wallet</button>
   else if (!onArc) action = <button className="btn warn" onClick={() => switchToArc().catch(() => {})}>Switch to Arc Mainnet</button>
-  else if (!pool) action = <button className="btn" disabled>Pool nahi mila</button>
+  else if (!pool) action = <button className="btn" disabled>Pool not found</button>
   else if (!plan) action = <button className="btn" disabled>Enter USDC amount</button>
   else if (plan.usdc > bal.USDC) action = <button className="btn" disabled>Insufficient USDC</button>
   else if (plan.eurc > bal.EURC) action = <button className="btn" disabled>Insufficient EURC</button>
@@ -179,9 +179,9 @@ export default function LiquidityPage() {
   return (
     <div>
       <h1>Liquidity</h1>
-      <p className="lead">USDC / EURC pool me liquidity daalo aur trading fees kamao. Position ek Uniswap v3 NFT hoti hai.</p>
+      <p className="lead">Provide USDC / EURC liquidity and earn trading fees. Each position is a Uniswap v3 NFT.</p>
       <div className="notice">
-        Real mainnet funds. Concentrated range (±1%, ±5%) me zyada fees milte hain, par price range ke bahar gaya to position fees kamana band kar deti hai. Full range sabse safe hai.
+        Real mainnet funds. Concentrated ranges (±1%, ±5%) earn more fees, but a position stops earning when the price moves outside its range. Full range is the safest.
       </div>
 
       <div className="card">
@@ -235,9 +235,9 @@ export default function LiquidityPage() {
       </div>
 
       <h2>Your positions</h2>
-      {!account && <p className="muted">Positions dekhne ke liye wallet connect karo.</p>}
+      {!account && <p className="muted">Connect your wallet to see your positions.</p>}
       {account && !positions && <p className="muted">Loading positions…</p>}
-      {account && positions && !positions.length && <p className="muted">Abhi koi USDC/EURC position nahi hai.</p>}
+      {account && positions && !positions.length && <p className="muted">No USDC / EURC positions yet.</p>}
       {positions &&
         positions.map((pos) => {
           const pp = pools.find((p) => p.fee === pos.fee)
