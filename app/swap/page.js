@@ -96,10 +96,10 @@ export default function SwapPage() {
         args: [account, ADDR.ROUTER],
       })
       if (allowance < amountRaw) {
-        setStatus('Step 1/2: ' + from + ' approve — wallet me confirm karo…')
+        setStatus('Step 1/2: Approve ' + from + ' in your wallet…')
         await write({ address: TOKENS[from], abi: erc20Abi, functionName: 'approve', args: [ADDR.ROUTER, amountRaw] })
       }
-      setStatus('Step 2/2: swap — wallet me confirm karo…')
+      setStatus('Step 2/2: Confirm the swap in your wallet…')
       const hash = await write({
         address: ADDR.ROUTER,
         abi: routerAbi,
@@ -117,18 +117,18 @@ export default function SwapPage() {
         ],
       })
       setTxHash(hash)
-      setStatus('Swap ho gaya ✅')
+      setStatus('Swap complete ✅')
       setAmount('')
       setTick((x) => x + 1)
     } catch (e) {
       setIsErr(true)
-      setStatus((e && (e.shortMessage || e.message)) || 'Swap fail ho gaya')
+      setStatus((e && (e.shortMessage || e.message)) || 'Swap failed')
     }
     setBusy(false)
   }
 
   let action
-  if (!account) action = <button className="btn" onClick={() => connect().catch(() => {})}>Connect wallet</button>
+  if (!account) action = <button className="btn" onClick={connect}>Connect wallet</button>
   else if (!onArc) action = <button className="btn warn" onClick={() => switchToArc().catch(() => {})}>Switch to Arc Mainnet</button>
   else if (amountRaw <= 0n) action = <button className="btn" disabled>Enter amount</button>
   else if (insufficient) action = <button className="btn" disabled>Insufficient {from}</button>
@@ -139,7 +139,7 @@ export default function SwapPage() {
     <div>
       <h1>Swap</h1>
       <p className="lead">USDC ↔ EURC · Arc Mainnet · Uniswap v3</p>
-      <div className="notice">Ye real mainnet hai. Pehle chhota amount (jaise 1 USDC) se test karo.</div>
+      <div className="notice">This is real Arc Mainnet. Test with a small amount (like 1 USDC) first.</div>
 
       <div className="card">
         <div className="field">
@@ -194,4 +194,4 @@ export default function SwapPage() {
       </div>
     </div>
   )
-                }
+}
