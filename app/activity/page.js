@@ -10,7 +10,7 @@ export default function ActivityPage() {
   return (
     <div>
       <h1>Activity</h1>
-      <p className="lead">USDC / EURC pools ke recent on-chain swaps (Arc Mainnet).</p>
+      <p className="lead">Recent on-chain swaps in the USDC / EURC pools on Arc Mainnet.</p>
       {account && (
         <div className="seg">
           <button className={!onlyMine ? 'on' : ''} onClick={() => setOnlyMine(false)}>All swaps</button>
