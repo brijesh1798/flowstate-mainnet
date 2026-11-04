@@ -15,10 +15,27 @@ export default function Header() {
   const { account, onArc, connect, switchToArc } = useWallet()
   const path = usePathname()
 
-  let btn
-  if (!account) btn = <button className="btn btn-sm" onClick={() => connect().catch(() => {})}>Connect wallet</button>
-  else if (!onArc) btn = <button className="btn btn-sm warn" onClick={() => switchToArc().catch(() => {})}>Switch to Arc</button>
-  else btn = <span className="chip">{short(account)}</span>
+  let right
+  if (!account) {
+    right = (
+      <button className="btn btn-sm" onClick={connect}>
+        Connect wallet
+      </button>
+    )
+  } else {
+    right = (
+      <div className="hdr-right">
+        {!onArc && (
+          <button className="btn btn-sm warn" onClick={() => switchToArc().catch(() => {})}>
+            Switch to Arc
+          </button>
+        )}
+        <button className="chip" onClick={connect}>
+          {short(account)}
+        </button>
+      </div>
+    )
+  }
 
   return (
     <header className="header">
@@ -27,7 +44,7 @@ export default function Header() {
           <span className="logo-mark">F</span>
           <span>FLOWSTATE</span>
         </Link>
-        {btn}
+        {right}
       </div>
       <nav className="nav">
         {links.map((l) => (
