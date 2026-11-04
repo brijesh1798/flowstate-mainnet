@@ -38,7 +38,7 @@ export default function Home() {
         Follow the <em>flow of capital.</em>
       </h1>
       <p className="lead">
-        Flowstate Arc Mainnet pe USDC / EURC ke swaps, pools aur liquidity ko ek jagah dikhata hai.
+        Flowstate tracks USDC / EURC swaps, pools and liquidity on Arc Mainnet in one place.
       </p>
       <div className="btn-row">
         <Link href="/swap" className="btn">Open swap ↗</Link>
@@ -47,7 +47,7 @@ export default function Home() {
 
       <h2>Pools</h2>
       {!pools && <p className="muted">Loading pools…</p>}
-      {pools && !pools.length && <p className="muted">Abhi koi USDC/EURC pool nahi mila.</p>}
+      {pools && !pools.length && <p className="muted">No USDC / EURC pool found yet.</p>}
       {pools &&
         pools.map((p) => (
           <div className="card" key={p.fee}>
